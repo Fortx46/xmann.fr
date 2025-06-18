@@ -976,371 +976,219 @@
         </div>
     </div>
 
-    <script>
-        // Variables globales
-        let posts = [];
-        let currentUser = null;
-        let currentUserData = null;
+   <script>
+// --- Variables et données locales ---
+let user = JSON.parse(localStorage.getItem("user")) || {
+    username: prompt("Choisis un pseudo :") || "Utilisateur",
+    email: "demo@example.com",
+    avatar: "https://picsum.photos/80/80?random=2",
+    status: "En ligne",
+    bio: "",
+    notifications: true,
+    private: false,
+    theme: "light",
+};
+let posts = JSON.parse(localStorage.getItem("posts")) || [];
+let friends = JSON.parse(localStorage.getItem("friends")) || ["Marie Dubois", "Pierre Leroy"];
+let friendSuggestions = [
+    {name: "Marie Dubois", mutual: 5, avatar: "https://picsum.photos/40/40?random=3"},
+    {name: "Pierre Leroy", mutual: 12, avatar: "https://picsum.photos/40/40?random=4"},
+    {name: "Sophie Chen", mutual: 3, avatar: "https://picsum.photos/40/40?random=5"}
+];
 
-        // Données d'exemple pour les posts
-        const samplePosts = [
-            {
-                id: 1,
-                author: "Marie Dubois",
-                avatar: "https://picsum.photos/50/50?random=10",
-                time: "Il y a 2 heures",
-                content: "Magnifique coucher de soleil aujourd'hui ! 🌅 Parfait pour terminer cette belle journée.",
-                image: "https://picsum.photos/600/400?random=20",
-                likes: 24,
-                comments: 5,
-                shares: 2,
-                liked: false
-            },
-            {
-                id: 2,
-                author: "Pierre Leroy",
-                avatar: "https://picsum.photos/50/50?random=11",
-                time: "Il y a 4 heures",
-                content: "Nouveau projet en cours ! Excited de partager mes avancées avec vous. Le développement web n'a jamais été aussi passionnant ! 💻✨",
-                likes: 18,
-                comments: 8,
-                shares: 3,
-                liked: true
-            },
-            {
-                id: 3,
-                author: "Sophie Chen",
-                avatar: "https://picsum.photos/50/50?random=12",
-                time: "Il y a 6 heures",
-                content: "Weekend de randonnée dans les Alpes ! La nature est vraiment ressourçante. 🏔️",
-                image: "https://picsum.photos/600/400?random=21",
-                likes: 42,
-                comments: 12,
-                shares: 7,
-                liked: false
-            }
-        ];
-
-        // Initialisation
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeUser();
-            loadSamplePosts();
-            setupEventListeners();
-        });
-
-       function initializeUser() {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const connectedUser = JSON.parse(localStorage.getItem("connectedUser"));
-
-  if (connectedUser) {
-    const currentUserData = users.find(u => u.email === connectedUser.email);
-    if (currentUserData) {
-      const currentUser = {
-        name: currentUserData.username,
-        email: currentUserData.email,
-        avatar: currentUserData.avatar || "https://picsum.photos/80/80?random=100",
-        status: currentUserData.status || "Nouveau membre",
-        bio: currentUserData.bio || "",
-        notifications: currentUserData.notifications !== false,
-        private: currentUserData.private || false,
-        theme: currentUserData.theme || "light",
-        id: currentUserData.id || Date.now()
-      };
-      updateUserDisplay(currentUser);
-    } else {
-      // Pas d'utilisateur valide -> redirection
-      window.location.href = "index.html"; // ou page de connexion
-    }
-  } else {
-    // Pas connecté -> redirection
-    window.location.href = "index.html"; // ou page de connexion
-  }
+// --- Mises à jour UI ---
+function updateProfileDisplay() {
+    document.getElementById("username-display").textContent = user.username;
+    document.getElementById("user-avatar").src = user.avatar;
+    document.querySelector(".user-status").textContent = user.status;
+}
+function updateStats() {
+    document.querySelectorAll(".stat-number")[0].textContent = friends.length;
+    document.querySelectorAll(".stat-number")[1].textContent = posts.length;
+    document.querySelectorAll(".stat-number")[2].textContent = posts.reduce((acc, p) => acc + (p.views || 1), 0);
+}
+function updateFriendSuggestions() {
+    document.querySelectorAll(".friend-suggestion").forEach((el, idx) => {
+        let s = friendSuggestions[idx];
+        if (!s) {el.style.display="none"; return;}
+        el.querySelector(".friend-avatar").src = s.avatar;
+        el.querySelector(".friend-name").textContent = s.name;
+        el.querySelector(".friend-mutual").textContent = s.mutual + " amis en commun";
+        el.querySelector(".add-friend-btn").disabled = friends.includes(s.name);
+        el.querySelector(".add-friend-btn").textContent = friends.includes(s.name) ? "Ajouté" : "Ajouter";
+    });
 }
 
-        // Mettre à jour l'affichage utilisateur
-        function updateUserDisplay() {
-            if (currentUser) {
-                document.getElementById('username-display').textContent = currentUser.name;
-                document.getElementById('user-avatar').src = currentUser.avatar;
-                document.querySelector('.profile-avatar').src = currentUser.avatar;
-                document.querySelector('.user-status').textContent = currentUser.status;
-                document.querySelector('.post-input').placeholder = `Quoi de neuf, ${currentUser.name} ?`;
-            }
-        }
+// --- Publication de post ---
+document.getElementById("publish-btn").onclick = function() {
+    let content = document.getElementById("post-input").value.trim();
+    if (!content) return;
+    let post = {
+        author: user.username,
+        avatar: user.avatar,
+        time: "À l’instant",
+        content,
+        image: null,
+        likes: 0,
+        comments: [],
+        shares: 0,
+        liked: false,
+        views: 1
+    };
+    posts.unshift(post);
+    localStorage.setItem("posts", JSON.stringify(posts));
+    document.getElementById("post-input").value = "";
+    renderPosts();
+    updateStats();
+};
 
-        // Charger les posts d'exemple
-        function loadSamplePosts() {
-            samplePosts.forEach(post => {
-                posts.unshift(post);
-                renderPost(post);
-            });
-        }
+// --- Ajout d'image dans un post ---
+document.getElementById("add-photo").onclick = function() {
+    document.getElementById("photo-input").click();
+};
+document.getElementById("photo-input").onchange = function(e) {
+    let file = this.files[0];
+    if (!file) return;
+    let reader = new FileReader();
+    reader.onload = function(ev) {
+        document.getElementById("post-input").value += "\n![Image](" + ev.target.result + ")";
+    };
+    reader.readAsDataURL(file);
+};
 
-        // Configuration des événements
-        function setupEventListeners() {
-            // Publier un post
-            document.getElementById('publish-btn').addEventListener('click', publishPost);
-            
-            // Ajouter une photo
-            document.getElementById('add-photo').addEventListener('click', function() {
-                document.getElementById('photo-input').click();
-            });
-            
-            document.getElementById('photo-input').addEventListener('change', handlePhotoUpload);
-            
-            // Enter pour publier
-            document.getElementById('post-input').addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.ctrlKey) {
-                    publishPost();
-                }
-            });
-
-            // Paramètres
-            document.querySelector('.menu-item:last-child').addEventListener('click', openSettingsModal);
-            
-            // Avatar dans les paramètres
-            document.getElementById('avatar-input').addEventListener('change', handleAvatarChange);
-        }
-
-        // Publier un nouveau post
-        function publishPost() {
-            const input = document.getElementById('post-input');
-            const content = input.value.trim();
-            
-            if (!content) return;
-            
-            const newPost = {
-                id: Date.now(),
-                author: currentUser.name,
-                avatar: currentUser.avatar,
-                time: "À l'instant",
-                content: content,
-                likes: 0,
-                comments: 0,
-                shares: 0,
-                liked: false
-            };
-            
-            posts.unshift(newPost);
-            renderPost(newPost, true);
-            input.value = '';
-        }
-
-        // Gérer l'upload de photo
-        function handlePhotoUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    // Ici vous pourriez stocker l'image ou l'afficher dans le post
-                    console.log('Photo uploadée:', event.target.result);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Rendre un post
-        function renderPost(post, prepend = false) {
-            const postElement = document.createElement('div');
-            postElement.className = 'post';
-            postElement.innerHTML = `
-                <div class="post-header">
-                    <img src="${post.avatar}" alt="${post.author}" class="post-avatar">
-                    <div class="post-info">
-                        <div class="post-author">${post.author}</div>
-                        <div class="post-time">${post.time}</div>
-                    </div>
-                    <div class="post-menu">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </div>
+// --- Affichage des posts ---
+function renderPosts() {
+    let html = "";
+    posts.forEach((post, idx) => {
+        let imgHtml = "";
+        // Affiche une image si présente (format markdown ou url)
+        let match = post.content.match(/!\[Image\]\((.*?)\)/);
+        let content = post.content.replace(/!\[Image\]\((.*?)\)/g,"");
+        if (match) imgHtml = `<img src="${match[1]}" class="post-image">`;
+        html += `
+        <div class="post">
+            <div class="post-header">
+                <img src="${post.avatar}" class="post-avatar">
+                <div class="post-info">
+                    <div class="post-author">${post.author}</div>
+                    <div class="post-time">${post.time}</div>
                 </div>
-                <div class="post-content">${post.content}</div>
-                ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image">` : ''}
-                <div class="post-interactions">
-                    <div class="interactions">
-                        <div class="interaction ${post.liked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
-                            <i class="fas fa-heart"></i>
-                            <span>${post.likes}</span>
-                        </div>
-                        <div class="interaction" onclick="toggleComments(${post.id})">
-                            <i class="fas fa-comment"></i>
-                            <span>${post.comments}</span>
-                        </div>
-                        <div class="interaction">
-                            <i class="fas fa-share"></i>
-                            <span>${post.shares}</span>
-                        </div>
-                    </div>
+            </div>
+            <div class="post-content">${content}</div>
+            ${imgHtml}
+            <div class="post-interactions">
+                <div class="interactions">
+                    <span class="interaction like-btn${post.liked ? ' liked' : ''}" data-idx="${idx}">
+                        <i class="fas fa-heart"></i> <span class="like-count">${post.likes}</span>
+                    </span>
+                    <span class="interaction comment-btn" data-idx="${idx}">
+                        <i class="fas fa-comment"></i> <span>${post.comments.length}</span>
+                    </span>
                 </div>
-            `;
-            
-            const container = document.getElementById('posts-container');
-            if (prepend) {
-                container.insertBefore(postElement, container.firstChild);
-            } else {
-                container.appendChild(postElement);
+            </div>
+        </div>`;
+    });
+    document.getElementById("posts-container").innerHTML = html;
+    document.querySelectorAll(".like-btn").forEach(btn => {
+        btn.onclick = function() {
+            let i = this.getAttribute("data-idx");
+            posts[i].liked = !posts[i].liked;
+            posts[i].likes += posts[i].liked ? 1 : -1;
+            localStorage.setItem("posts", JSON.stringify(posts));
+            renderPosts();
+        }
+    });
+    document.querySelectorAll(".comment-btn").forEach(btn => {
+        btn.onclick = function() {
+            let i = this.getAttribute("data-idx");
+            let comment = prompt("Votre commentaire :");
+            if (comment) {
+                posts[i].comments.push({user: user.username, text: comment});
+                localStorage.setItem("posts", JSON.stringify(posts));
+                renderPosts();
             }
         }
+    });
+}
 
-        // Toggle like sur un post
-        function toggleLike(postId) {
-            const post = posts.find(p => p.id === postId);
-            if (post) {
-                post.liked = !post.liked;
-                post.likes += post.liked ? 1 : -1;
-                
-                // Mettre à jour l'affichage
-                const container = document.getElementById('posts-container');
-                container.innerHTML = '';
-                posts.forEach(p => renderPost(p));
-            }
+// --- Amis / Suggestions ---
+document.querySelectorAll(".add-friend-btn").forEach((btn, idx) => {
+    btn.onclick = function() {
+        let friendName = friendSuggestions[idx].name;
+        if (!friends.includes(friendName)) {
+            friends.push(friendName);
+            localStorage.setItem("friends", JSON.stringify(friends));
+            updateFriendSuggestions();
+            updateStats();
         }
+    };
+});
 
-        // Toggle commentaires
-        function toggleComments(postId) {
-            console.log('Toggle comments for post:', postId);
-            // Ici vous pourriez implémenter l'affichage des commentaires
-        }
+// --- Menu Paramètres ---
+document.querySelector(".fa-cog").parentNode.onclick = openSettingsModal;
+function openSettingsModal() {
+    document.getElementById("settings-modal").style.display = "flex";
+    document.getElementById("settings-avatar").src = user.avatar;
+    document.getElementById("settings-username").value = user.username;
+    document.getElementById("settings-email").value = user.email;
+    document.getElementById("settings-status").value = user.status;
+    document.getElementById("settings-bio").value = user.bio || "";
+    document.getElementById("settings-notifications").checked = user.notifications;
+    document.getElementById("settings-private").checked = user.private;
+    document.getElementById("settings-theme").value = user.theme;
+}
+function closeSettingsModal() {
+    document.getElementById("settings-modal").style.display = "none";
+}
+function saveSettings() {
+    user.username = document.getElementById("settings-username").value;
+    user.status = document.getElementById("settings-status").value;
+    user.bio = document.getElementById("settings-bio").value;
+    user.notifications = document.getElementById("settings-notifications").checked;
+    user.private = document.getElementById("settings-private").checked;
+    user.theme = document.getElementById("settings-theme").value;
+    localStorage.setItem("user", JSON.stringify(user));
+    updateProfileDisplay();
+    closeSettingsModal();
+    if (user.theme === "dark") {
+        document.body.classList.add("theme-dark");
+    } else {
+        document.body.classList.remove("theme-dark");
+    }
+}
+function logout() {
+    localStorage.clear();
+    location.reload();
+}
+// Avatar modif
+document.getElementById("avatar-input").onchange = function(e) {
+    let file = this.files[0];
+    if (!file) return;
+    let reader = new FileReader();
+    reader.onload = function(ev) {
+        user.avatar = ev.target.result;
+        document.getElementById("settings-avatar").src = user.avatar;
+        document.getElementById("user-avatar").src = user.avatar;
+        localStorage.setItem("user", JSON.stringify(user));
+        updateProfileDisplay();
+    };
+    reader.readAsDataURL(file);
+};
 
-        // Ouvrir les paramètres
-        function openSettingsModal() {
-            if (currentUser) {
-                document.getElementById('settings-username').value = currentUser.name;
-                document.getElementById('settings-email').value = currentUser.email;
-                document.getElementById('settings-status').value = currentUser.status;
-                document.getElementById('settings-bio').value = currentUser.bio;
-                document.getElementById('settings-notifications').checked = currentUser.notifications;
-                document.getElementById('settings-private').checked = currentUser.private;
-                document.getElementById('settings-theme').value = currentUser.theme;
-                document.getElementById('settings-avatar').src = currentUser.avatar;
-                document.getElementById('settings-modal').style.display = 'block';
-            }
-        }
+// Fermer modal sur clic sur overlay
+document.getElementById("settings-modal").onclick = function(e) {
+    if (e.target === this) closeSettingsModal();
+};
 
-        // Fermer les paramètres
-        function closeSettingsModal() {
-            document.getElementById('settings-modal').style.display = 'none';
-        }
-
-        // Gérer le changement d'avatar
-        function handleAvatarChange(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const newAvatar = event.target.result;
-                    document.getElementById('settings-avatar').src = newAvatar;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Sauvegarder les paramètres
-        function saveSettings() {
-            if (!currentUser) return;
-
-            // Récupérer les nouvelles valeurs
-            const newUsername = document.getElementById('settings-username').value.trim();
-            const newStatus = document.getElementById('settings-status').value.trim();
-            const newBio = document.getElementById('settings-bio').value.trim();
-            const newNotifications = document.getElementById('settings-notifications').checked;
-            const newPrivate = document.getElementById('settings-private').checked;
-            const newTheme = document.getElementById('settings-theme').value;
-            const newAvatar = document.getElementById('settings-avatar').src;
-
-            if (!newUsername) {
-                alert('Le nom d\'utilisateur ne peut pas être vide.');
-                return;
-            }
-
-            // Mettre à jour currentUser
-            currentUser.name = newUsername;
-            currentUser.status = newStatus;
-            currentUser.bio = newBio;
-            currentUser.notifications = newNotifications;
-            currentUser.private = newPrivate;
-            currentUser.theme = newTheme;
-            currentUser.avatar = newAvatar;
-
-            // Mettre à jour dans localStorage
-            const users = JSON.parse(localStorage.getItem("users")) || [];
-            const userIndex = users.findIndex(u => u.email === currentUser.email);
-            if (userIndex !== -1) {
-                users[userIndex] = {
-                    ...users[userIndex],
-                    username: newUsername,
-                    status: newStatus,
-                    bio: newBio,
-                    notifications: newNotifications,
-                    private: newPrivate,
-                    theme: newTheme,
-                    avatar: newAvatar
-                };
-                localStorage.setItem("users", JSON.stringify(users));
-                
-                // Mettre à jour connectedUser
-                localStorage.setItem("connectedUser", JSON.stringify({
-                    email: currentUser.email,
-                    username: newUsername
-                }));
-            }
-
-            // Mettre à jour l'affichage
-            updateUserDisplay();
-            
-            // Appliquer le thème
-            applyTheme(newTheme);
-
-            alert('Paramètres sauvegardés avec succès !');
-            closeSettingsModal();
-        }
-
-        // Appliquer le thème
-        function applyTheme(theme) {
-            const body = document.body;
-            body.classList.remove('theme-light', 'theme-dark');
-            
-            if (theme === 'dark') {
-                body.classList.add('theme-dark');
-            } else if (theme === 'light') {
-                body.classList.add('theme-light');
-            } else {
-                // Auto - détection système
-                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    body.classList.add('theme-dark');
-                } else {
-                    body.classList.add('theme-light');
-                }
-            }
-        }
-
-        // Déconnexion
-        function logout() {
-            if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-                localStorage.removeItem("connectedUser");
-                window.location.href = "index.html";
-            }
-        }
-
-        // Animation au scroll
-        window.addEventListener('scroll', function() {
-            const posts = document.querySelectorAll('.post');
-            posts.forEach(post => {
-                const rect = post.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    post.style.opacity = '1';
-                    post.style.transform = 'translateY(0)';
-                }
-            });
-        });
-
-        // Fermer modal en cliquant à l'extérieur
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('settings-modal');
-            if (e.target === modal) {
-                closeSettingsModal();
-            }
-        });
-    </script>
+// --- Initialisation ---
+updateProfileDisplay();
+updateStats();
+updateFriendSuggestions();
+renderPosts();
+// Appliquer le thème au chargement
+if (user.theme === "dark" || (user.theme === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+    document.body.classList.add("theme-dark");
+}
+</script>
 </body>
 </html>
