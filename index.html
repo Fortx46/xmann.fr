@@ -1,217 +1,358 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>XMAN – Tous mes domaines</title>
-<meta name="description" content="Discord, TikTok, Roblox, Drive, GitHub et Security Server : tous mes sites au même endroit.">
-<link rel="icon" href="https://iili.io/naT8jou.jpg">
-<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<title>Xman – Applications mobiles sur mesure pour les entreprises</title>
+<meta name="description" content="Xman conçoit, design et développe des applications iOS & Android sur mesure pour les entreprises : sécurisées, performantes, haut de gamme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    fontFamily: { display: ['Sora','sans-serif'], sans: ['"Plus Jakarta Sans"','sans-serif'] },
+    colors: { night:'#070B1A', navy:'#0D1430', slate2:'#141C3A', electric:'#3B6CFF', violet2:'#8B5CF6' }
+  } }
+}
+</script>
 <style>
-/* Police Minecraft : place "Minecraft.woff2" ou "Minecraft.ttf" à côté de ce fichier (sinon VT323 est utilisée). */
-@font-face{font-family:"Minecraft";src:local("Minecraft"),url("Minecraft.woff2") format("woff2"),url("Minecraft.ttf") format("truetype");font-display:swap}
-@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
-:root{--bg:#06060b;--card:#0d0d15;--line:#ffffff14;--txt:#f3f1ff;--mut:#9d9ac0;--p1:#8b5cf6;--p2:#38bdf8;--p3:#f472b6}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
-body{background:var(--bg);color:var(--txt);font:22px/1.35 "Minecraft","VT323",monospace;overflow-x:hidden}
-a{color:inherit;text-decoration:none}
-@media(pointer:fine){*{cursor:none!important}}
-body::before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(900px 500px at 50% -10%,#8b5cf633,transparent 70%),radial-gradient(600px 400px at 100% 80%,#38bdf81f,transparent 70%),linear-gradient(var(--line) 1px,transparent 1px) 0 0/64px 64px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/64px 64px;-webkit-mask:radial-gradient(ellipse at 50% 25%,#000 25%,transparent 80%);mask:radial-gradient(ellipse at 50% 25%,#000 25%,transparent 80%)}
-#c{position:fixed;inset:0;z-index:-1;pointer-events:none}
-/* curseur rond */
-#dot,#ring{position:fixed;left:0;top:0;border-radius:50%;pointer-events:none;z-index:999;opacity:0;transition:opacity .3s}
-#dot{width:8px;height:8px;margin:-4px;background:#fff}
-#ring{width:40px;height:40px;margin:-20px;border:2px solid #c4b5fd;transition:width .25s,height .25s,margin .25s,background .25s,opacity .3s}
-#ring.h{width:72px;height:72px;margin:-36px;background:#8b5cf633;border-color:#fff}
-#ring.d{width:28px;height:28px;margin:-14px;background:#c4b5fd55}
-@media(pointer:coarse){#dot,#ring{display:none}}
-/* bordure lumineuse */
-.gb{position:relative;isolation:isolate}
-.gb::before,.gb::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;z-index:-1;background:conic-gradient(from var(--a),transparent 0 55%,var(--p1),var(--p2),var(--p3),transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite}
-.gb::after{filter:blur(14px);opacity:.5}
-@keyframes spin{to{--a:360deg}}
-/* nav */
-nav{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:50;display:flex;align-items:center;gap:6px;padding:8px 10px 8px 12px;border-radius:99px;background:#0d0d15cc;backdrop-filter:blur(14px);white-space:nowrap;animation:drop 1s .2s both cubic-bezier(.2,.9,.2,1)}
-@keyframes drop{from{transform:translate(-50%,-150%)}}
-nav img{width:34px;height:34px;border-radius:50%;object-fit:cover;margin-right:6px}
-nav a.l{padding:8px 14px;border-radius:99px;color:var(--mut);transition:.2s}
-nav a.l:hover{color:#fff;background:#ffffff12}
-.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 26px;border-radius:99px;background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;font-size:22px;box-shadow:0 8px 30px #8b5cf64d;transition:box-shadow .3s,transform .15s}
-.btn:hover{box-shadow:0 8px 44px #8b5cf6aa}
-.btn.o{background:#ffffff0d;box-shadow:none;border:1px solid var(--line)}
-nav .btn{padding:8px 20px}
-@media(max-width:760px){nav a.l{display:none}}
-section{padding:110px 20px;max-width:1180px;margin:auto;position:relative}
-.sub{display:inline-block;padding:6px 18px;border-radius:99px;background:#ffffff0a;border:1px solid var(--line);color:#c4b5fd;margin-bottom:16px}
-h2{font-weight:400;font-size:clamp(36px,6vw,64px);line-height:1;letter-spacing:1px;margin-bottom:14px}
-.g{background:linear-gradient(90deg,#fff,#c4b5fd 45%,#7dd3fc 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.tc{text-align:center}.tc p.d{margin:0 auto}
-p.d{color:var(--mut);max-width:560px;font-size:23px}
-/* hero */
-#top{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:130px}
-.logo{position:relative;width:min(280px,64vw);aspect-ratio:1;margin-bottom:34px;animation:float 5s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-14px)}}
-.logo>img.m{width:100%;height:100%;border-radius:50%;object-fit:cover;border:5px solid var(--bg);box-shadow:0 0 0 3px var(--p1),0 0 90px #8b5cf688}
-.logo .ring{position:absolute;inset:-22px;border-radius:50%;border:2px dashed #ffffff30;animation:rot 20s linear infinite}
-.logo .ring.r2{inset:-44px;border-color:#38bdf833;animation-duration:32s;animation-direction:reverse}
-.logo .ring::after{content:"";position:absolute;top:-6px;left:50%;width:12px;height:12px;border-radius:50%;background:var(--p3);box-shadow:0 0 18px var(--p3)}
-.logo .r2::after{background:var(--p2);box-shadow:0 0 18px var(--p2)}
-@keyframes rot{to{transform:rotate(360deg)}}
-.kirua{position:absolute;right:-14px;bottom:4px;width:34%;aspect-ratio:1;border-radius:22%;object-fit:cover;border:4px solid var(--bg);box-shadow:0 0 0 3px var(--p2),0 0 30px #38bdf888;transform:rotate(8deg);animation:wob 4s ease-in-out infinite}
-@keyframes wob{50%{transform:rotate(-6deg) scale(1.06)}}
-h1{font-weight:400;font-size:clamp(60px,13vw,150px);line-height:.95;letter-spacing:2px}
-.hero-sub{margin:18px 0 32px;font-size:clamp(24px,3.4vw,34px);color:var(--mut);min-height:1.4em}
-.hero-sub b{font-weight:400;color:#fff;display:inline-block;animation:sw .5s both}
-@keyframes sw{from{opacity:0;transform:translateY(14px) scale(.9);filter:blur(5px)}}
-.cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-.scroll{position:absolute;bottom:26px;left:50%;width:26px;height:44px;margin-left:-13px;border:2px solid #ffffff44;border-radius:99px}
-.scroll::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:4px;background:#fff;animation:sc 1.6s infinite}
-@keyframes sc{60%{transform:translateY(16px);opacity:0}}
-/* marquee */
-.mq{overflow:hidden;padding:26px 0;border-block:1px solid var(--line);background:#ffffff05;-webkit-mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.mq div{display:flex;gap:60px;width:max-content;animation:mq 28s linear infinite}
-.mq span{display:flex;align-items:center;gap:12px;font-size:28px;color:var(--mut)}
-.mq img,.mq svg{width:28px;height:28px}
-@keyframes mq{to{transform:translateX(-50%)}}
-/* carrousel */
-.track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:30px 20px 40px;margin:0 -20px;scrollbar-width:none}
-.track::-webkit-scrollbar{display:none}
-.track.drag{scroll-snap-type:none;scroll-behavior:auto}
-.card{flex:0 0 min(340px,82vw);scroll-snap-align:center;position:relative;padding:30px;border-radius:26px;background:var(--card);overflow:hidden;transition:transform .2s;transform-style:preserve-3d;user-select:none}
-.card::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--mx,50%) var(--my,0%),var(--c,#8b5cf6)44,transparent 70%);opacity:0;transition:opacity .3s}
-.card:hover::before{opacity:1}
-.card>*{position:relative}
-.ic{width:72px;height:72px;border-radius:20px;display:grid;place-items:center;background:#ffffff0d;border:1px solid var(--line);margin-bottom:22px;box-shadow:0 0 40px -6px var(--c)}
-.ic img,.ic svg{width:38px;height:38px;pointer-events:none}
-.card h3{font-weight:400;font-size:34px;line-height:1}
-.card .t{color:var(--c);margin:6px 0 14px}
-.card p{color:var(--mut)}
-.card .go{margin-top:22px;display:inline-flex;gap:8px;color:#fff}
-.card:hover .go{gap:16px}.go{transition:gap .2s}
-.ctrl{display:flex;align-items:center;justify-content:center;gap:18px}
-.ctrl button{width:52px;height:52px;border-radius:50%;background:#ffffff0d;border:1px solid var(--line);color:#fff;font:inherit;font-size:26px;transition:.2s}
-.ctrl button:hover{background:#8b5cf644}
-.dots{display:flex;gap:8px}
-.dots i{width:10px;height:10px;border-radius:10px;background:#ffffff33;transition:.3s}
-.dots i.on{width:34px;background:linear-gradient(90deg,var(--p1),var(--p2))}
-/* lignes par domaine */
-.row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;padding:50px 0}
-.row:nth-child(even) .vis{order:2}
-.vis{aspect-ratio:1.15;border-radius:30px;background:var(--card);display:grid;place-items:center;position:relative;overflow:hidden}
-.vis::before{content:"";position:absolute;width:75%;aspect-ratio:1;border-radius:50%;background:radial-gradient(var(--c)66,transparent 68%);animation:pulse 4s ease-in-out infinite}
-@keyframes pulse{50%{transform:scale(1.25);opacity:.6}}
-.vis .big{position:relative;width:40%;aspect-ratio:1;display:grid;place-items:center;border-radius:28%;background:#0d0d15;border:1px solid var(--line);box-shadow:0 0 70px -6px var(--c);animation:float 5s ease-in-out infinite}
-.big img,.big svg{width:54%}
-.vis .o1{position:absolute;inset:14%;border:1px dashed #ffffff22;border-radius:50%;animation:rot 24s linear infinite}
-.row h3{font-weight:400;font-size:clamp(34px,5vw,54px);line-height:1;margin-bottom:12px}
-.row ul{list-style:none;margin:22px 0 28px;display:grid;gap:10px}
-.row li{display:flex;gap:12px;align-items:center}
-.row li::before{content:"";width:12px;height:12px;background:var(--c);box-shadow:0 0 14px var(--c);flex:none}
-@media(max-width:820px){.row{grid-template-columns:1fr;gap:28px}.row:nth-child(even) .vis{order:0}}
-/* cta final + footer */
-.end{padding:70px 24px;border-radius:34px;background:var(--card);text-align:center;overflow:hidden}
-.end::before{content:"";position:absolute;left:50%;bottom:-160px;width:520px;height:320px;margin-left:-260px;background:radial-gradient(#8b5cf655,transparent 70%);z-index:-1}
-footer{max-width:1180px;margin:auto;padding:40px 20px 50px;display:flex;flex-wrap:wrap;gap:18px 30px;justify-content:space-between;align-items:center;color:var(--mut);border-top:1px solid var(--line)}
-footer div{display:flex;gap:22px;flex-wrap:wrap}footer a:hover{color:#fff}
-/* révélation au scroll */
-.rv{opacity:0;transform:translateY(44px);filter:blur(7px);transition:opacity .9s,transform .9s cubic-bezier(.2,.9,.2,1),filter .9s;transition-delay:var(--d,0s)}
-.rv.in{opacity:1;transform:none;filter:none}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none;filter:none}}
+  body { background:#070B1A; color:#C9D1EA; }
+  .grad-text { background:linear-gradient(100deg,#6C94FF,#A78BFA); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .btn-grad { background:linear-gradient(100deg,#3B6CFF,#8B5CF6); transition:transform .2s, box-shadow .2s; }
+  .btn-grad:hover { transform:translateY(-1px); box-shadow:0 10px 30px -8px rgba(99,102,241,.7); }
+  .glass { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); }
+  .glow { position:absolute; border-radius:9999px; filter:blur(110px); pointer-events:none; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline:2px solid #8EA9FF; outline-offset:3px; }
+  .phone { box-shadow:0 40px 90px -20px rgba(59,108,255,.45), inset 0 0 0 2px rgba(255,255,255,.12); }
+  .float-a { animation:floaty 7s ease-in-out infinite; }
+  .float-b { animation:floaty 9s ease-in-out infinite reverse; }
+  @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+  .bar { transform-origin:bottom; animation:grow 1.4s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes grow { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+  .spinner { width:20px; height:20px; border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff; border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  .pop { animation:pop .6s cubic-bezier(.2,1.2,.3,1) both; }
+  @keyframes pop { from{opacity:0; transform:scale(.7)} to{opacity:1; transform:scale(1)} }
+  .draw { stroke-dasharray:30; stroke-dashoffset:30; animation:draw .6s .25s ease forwards; }
+  @keyframes draw { to{stroke-dashoffset:0} }
+  .field { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); transition:border-color .2s, background .2s; }
+  .field:focus { border-color:#6C94FF; background:rgba(255,255,255,.07); outline:none; }
+  @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation:none !important; transition:none !important; } html{scroll-behavior:auto} }
 </style>
 </head>
-<body>
-<canvas id="c"></canvas><div id="ring"></div><div id="dot"></div>
+<body class="font-sans antialiased">
 
-<nav class="gb">
-  <img src="https://cdn.discordapp.com/avatars/870788515267502101/e51927e24207f9357d6cbefb5e283d57.webp?size=1024" referrerpolicy="no-referrer" onerror="fb(this)" alt="Fortx46">
-  <a class="l" href="#top">Accueil</a><a class="l" href="#domaines">Domaines</a><a class="l" href="#details">Détails</a><a class="l" href="#contact">Contact</a>
-  <a class="btn" href="https://discord.com/users/870788515267502101" target="_blank" rel="noopener">Discord</a>
-</nav>
-
-<section id="top">
-  <div class="logo">
-    <div class="ring r2"></div><div class="ring"></div>
-    <img class="m" src="https://cdn.discordapp.com/avatars/870788515267502101/e51927e24207f9357d6cbefb5e283d57.webp?size=1024" referrerpolicy="no-referrer" onerror="fb(this)" alt="Fortx46">
-    <img class="kirua" src="https://iili.io/naT8jou.jpg" referrerpolicy="no-referrer" alt="Kirua">
+<!-- HEADER -->
+<header id="top" class="fixed inset-x-0 top-0 z-50 transition-colors duration-300" data-header>
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+    <a href="#accueil" class="flex items-center gap-2.5" aria-label="Xman – Accueil">
+      <span class="grid h-9 w-9 place-items-center rounded-xl btn-grad"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></span>
+      <span class="font-display text-xl font-semibold tracking-tight text-white">Xman</span>
+    </a>
+    <nav class="hidden items-center gap-8 text-sm font-medium lg:flex" aria-label="Navigation principale">
+      <a class="transition hover:text-white" href="#accueil">Accueil</a>
+      <a class="transition hover:text-white" href="#services">Services</a>
+      <a class="transition hover:text-white" href="#expertise">Notre Expertise</a>
+      <a class="transition hover:text-white" href="#temoignages">Témoignages</a>
+      <a class="transition hover:text-white" href="#contact">Contact</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="#contact" class="btn-grad hidden rounded-full px-5 py-2.5 text-sm font-semibold text-white sm:inline-block">Demander un devis</a>
+      <button id="menuBtn" class="grid h-10 w-10 place-items-center rounded-lg glass lg:hidden" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobileMenu"><i data-lucide="menu" class="h-5 w-5 text-white"></i></button>
+    </div>
   </div>
-  <span class="sub rv">Bienvenue sur mon univers</span>
-  <h1 class="g rv" style="--d:.1s">XMAN</h1>
-  <p class="hero-sub rv" style="--d:.2s">Retrouve-moi sur <b id="w">Discord</b></p>
-  <div class="cta rv" style="--d:.3s"><a class="btn mag" href="#domaines">Voir mes domaines</a><a class="btn o mag" href="#contact">Me contacter</a></div>
-  <div class="scroll"></div>
-</section>
+  <div id="mobileMenu" class="hidden border-t border-white/10 bg-night/95 backdrop-blur-xl lg:hidden">
+    <nav class="mx-auto flex max-w-7xl flex-col gap-1 px-5 py-4 text-base font-medium" aria-label="Navigation mobile">
+      <a class="rounded-lg px-3 py-3 hover:bg-white/5" href="#accueil">Accueil</a>
+      <a class="rounded-lg px-3 py-3 hover:bg-white/5" href="#services">Services</a>
+      <a class="rounded-lg px-3 py-3 hover:bg-white/5" href="#expertise">Notre Expertise</a>
+      <a class="rounded-lg px-3 py-3 hover:bg-white/5" href="#temoignages">Témoignages</a>
+      <a class="rounded-lg px-3 py-3 hover:bg-white/5" href="#contact">Contact</a>
+      <a href="#contact" class="btn-grad mt-2 rounded-full px-5 py-3 text-center font-semibold text-white">Demander un devis</a>
+    </nav>
+  </div>
+</header>
 
-<div class="mq"><div id="mq"></div></div>
+<main>
+<!-- HERO -->
+<section id="accueil" class="relative overflow-hidden pt-32 pb-20 lg:pt-44 lg:pb-32">
+  <div class="glow -left-40 top-10 h-[420px] w-[420px] bg-electric/30"></div>
+  <div class="glow right-0 top-40 h-[380px] w-[380px] bg-violet2/25"></div>
+  <div class="relative mx-auto grid max-w-7xl items-center gap-16 px-5 lg:grid-cols-[1.1fr_.9fr] lg:px-8">
+    <div>
+      <p class="glass mb-7 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-slate-300"><i data-lucide="shield-check" class="h-4 w-4 text-electric"></i>Studio mobile B2B · iOS & Android</p>
+      <h1 class="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.6rem]">Vos équipes méritent une application <span class="grad-text">à la hauteur de votre ambition.</span></h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate-400">Xman conçoit, design et développe des applications mobiles sur mesure pour les entreprises : outils métiers, applications grand public et transformation digitale, sécurisés et prêts pour l’échelle.</p>
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+        <a href="#contact" class="btn-grad inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white">Demander un devis<i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+        <a href="#services" class="glass inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 font-semibold text-white transition hover:bg-white/10"><i data-lucide="play-circle" class="h-4 w-4"></i>Découvrir nos services</a>
+      </div>
+      <ul class="mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-slate-400">
+        <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-electric"></i>Conforme RGPD</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-electric"></i>Hébergement européen</li>
+        <li class="flex items-center gap-2"><i data-lucide="check" class="h-4 w-4 text-electric"></i>Code et propriété vous appartiennent</li>
+      </ul>
+    </div>
 
-<section id="domaines">
-  <div class="tc"><span class="sub rv">Mes domaines</span><h2 class="g rv">Tout au même endroit</h2><p class="d rv">Glisse pour parcourir, clique pour ouvrir le site.</p></div>
-  <div class="track" id="track"></div>
-  <div class="ctrl"><button id="pv" aria-label="Précédent">‹</button><div class="dots" id="dots"></div><button id="nx" aria-label="Suivant">›</button></div>
-</section>
-
-<section id="details"><div id="rows"></div></section>
-
-<section id="contact">
-  <div class="end gb rv">
-    <h2 class="g">Un message suffit.</h2>
-    <p class="d" style="margin:0 auto 28px">Une question, une idée, une collab ? Écris-moi sur Discord.</p>
-    <a class="btn mag" href="https://discord.com/users/870788515267502101" target="_blank" rel="noopener">Ouvrir Discord</a>
+    <!-- Mockup -->
+    <div class="relative mx-auto h-[560px] w-full max-w-md" aria-hidden="true">
+      <div class="phone absolute left-1/2 top-0 h-[540px] w-[270px] -translate-x-1/2 rounded-[2.6rem] bg-gradient-to-b from-slate2 to-night p-3">
+        <div class="relative h-full w-full overflow-hidden rounded-[2rem] bg-night">
+          <div class="mx-auto mt-2 h-5 w-24 rounded-full bg-black"></div>
+          <div class="px-4 pt-4">
+            <div class="flex items-center justify-between"><div><p class="text-[11px] text-slate-500">Bonjour, Camille</p><p class="font-display text-sm font-semibold text-white">Tableau de bord</p></div><div class="h-8 w-8 rounded-full btn-grad"></div></div>
+            <div class="mt-4 rounded-2xl bg-gradient-to-br from-electric to-violet2 p-4">
+              <p class="text-[11px] text-white/70">Interventions du jour</p>
+              <p class="font-display text-3xl font-semibold text-white">128</p>
+              <p class="text-[11px] text-white/80">+12 % vs hier</p>
+            </div>
+            <div class="mt-4 flex h-24 items-end gap-2 rounded-2xl glass p-3">
+              <div class="bar w-full rounded bg-electric/40" style="height:35%"></div>
+              <div class="bar w-full rounded bg-electric/50" style="height:55%;animation-delay:.1s"></div>
+              <div class="bar w-full rounded bg-electric/60" style="height:42%;animation-delay:.2s"></div>
+              <div class="bar w-full rounded bg-violet2/70" style="height:80%;animation-delay:.3s"></div>
+              <div class="bar w-full rounded bg-violet2" style="height:100%;animation-delay:.4s"></div>
+              <div class="bar w-full rounded bg-electric/60" style="height:62%;animation-delay:.5s"></div>
+            </div>
+            <div class="mt-3 space-y-2">
+              <div class="flex items-center gap-3 rounded-xl glass p-2.5"><span class="grid h-8 w-8 place-items-center rounded-lg bg-electric/20"><i data-lucide="map-pin" class="h-4 w-4 text-electric"></i></span><div class="text-[11px]"><p class="font-semibold text-white">Site Lyon-Part-Dieu</p><p class="text-slate-500">Terminé · 09:42</p></div></div>
+              <div class="flex items-center gap-3 rounded-xl glass p-2.5"><span class="grid h-8 w-8 place-items-center rounded-lg bg-violet2/20"><i data-lucide="wrench" class="h-4 w-4 text-violet2"></i></span><div class="text-[11px]"><p class="font-semibold text-white">Maintenance préventive</p><p class="text-slate-500">En cours · 11:15</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="float-a glass absolute -left-2 top-24 flex items-center gap-3 rounded-2xl bg-navy/80 p-3 pr-5 backdrop-blur sm:-left-8"><span class="grid h-10 w-10 place-items-center rounded-xl bg-emerald-400/15"><i data-lucide="lock" class="h-5 w-5 text-emerald-300"></i></span><div class="text-xs"><p class="font-semibold text-white">Chiffrement de bout en bout</p><p class="text-slate-400">AES-256 · SSO</p></div></div>
+      <div class="float-b glass absolute -right-2 bottom-16 flex items-center gap-3 rounded-2xl bg-navy/80 p-3 pr-5 backdrop-blur sm:-right-6"><span class="grid h-10 w-10 place-items-center rounded-xl bg-electric/20"><i data-lucide="smartphone" class="h-5 w-5 text-electric"></i></span><div class="text-xs"><p class="font-semibold text-white">iOS + Android</p><p class="text-slate-400">Publié sur les stores</p></div></div>
+    </div>
   </div>
 </section>
 
-<footer><span>© 2026 XMAN</span><div id="fl"></div></footer>
+<!-- PREUVE SOCIALE -->
+<section class="relative border-y border-white/10 bg-navy/60 py-16" aria-label="Chiffres clés et références">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <dl class="grid grid-cols-2 gap-8 lg:grid-cols-4">
+      <div><dt class="text-sm text-slate-400">Projets livrés</dt><dd class="mt-1 font-display text-4xl font-semibold text-white"><span data-count="50">0</span>+</dd></div>
+      <div><dt class="text-sm text-slate-400">Clients satisfaits</dt><dd class="mt-1 font-display text-4xl font-semibold text-white"><span data-count="99">0</span>%</dd></div>
+      <div><dt class="text-sm text-slate-400">Utilisateurs actifs sur nos apps</dt><dd class="mt-1 font-display text-4xl font-semibold text-white"><span data-count="2">0</span>M+</dd></div>
+      <div><dt class="text-sm text-slate-400">Note moyenne sur les stores</dt><dd class="mt-1 font-display text-4xl font-semibold text-white">4,8<span class="text-xl text-slate-500">/5</span></dd></div>
+    </dl>
+    <p class="mt-14 text-center text-sm text-slate-500">Ils nous ont confié leurs applications</p>
+    <div class="mt-6 grid grid-cols-2 items-center gap-x-8 gap-y-6 text-center font-display text-lg font-semibold text-slate-500 sm:grid-cols-3 lg:grid-cols-6">
+      <span class="flex items-center justify-center gap-2"><i data-lucide="hexagon" class="h-5 w-5"></i>Nexora</span>
+      <span class="flex items-center justify-center gap-2"><i data-lucide="triangle" class="h-5 w-5"></i>Altiva</span>
+      <span class="flex items-center justify-center gap-2"><i data-lucide="circle-dot" class="h-5 w-5"></i>Orbis</span>
+      <span class="flex items-center justify-center gap-2"><i data-lucide="layers" class="h-5 w-5"></i>Vektra</span>
+      <span class="flex items-center justify-center gap-2"><i data-lucide="diamond" class="h-5 w-5"></i>Lumen&amp;Co</span>
+      <span class="flex items-center justify-center gap-2"><i data-lucide="square" class="h-5 w-5"></i>Brisa</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="relative py-24 lg:py-32">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <div class="max-w-2xl">
+      <h2 class="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">Une seule équipe, de l’idée à l’App Store</h2>
+      <p class="mt-4 text-lg text-slate-400">Quatre savoir-faire intégrés pour livrer des applications que vos utilisateurs adoptent et que vos DSI approuvent.</p>
+    </div>
+    <div class="mt-14 grid gap-5 lg:grid-cols-6">
+      <article class="glass group relative overflow-hidden rounded-3xl p-8 lg:col-span-4">
+        <div class="glow -right-20 -top-20 h-64 w-64 bg-electric/20"></div>
+        <span class="relative grid h-12 w-12 place-items-center rounded-2xl btn-grad"><i data-lucide="smartphone" class="h-6 w-6 text-white"></i></span>
+        <h3 class="relative mt-6 font-display text-2xl font-semibold text-white">Développement iOS & Android</h3>
+        <p class="relative mt-3 max-w-lg text-slate-400">Applications natives (Swift, Kotlin) ou multiplateformes (Flutter, React Native), choisies selon vos contraintes de performance, de budget et de calendrier.</p>
+        <ul class="relative mt-6 flex flex-wrap gap-2 text-sm"><li class="rounded-full bg-white/5 px-3 py-1">Swift</li><li class="rounded-full bg-white/5 px-3 py-1">Kotlin</li><li class="rounded-full bg-white/5 px-3 py-1">Flutter</li><li class="rounded-full bg-white/5 px-3 py-1">React Native</li></ul>
+      </article>
+      <article class="glass rounded-3xl p-8 lg:col-span-2">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-violet2/20"><i data-lucide="pen-tool" class="h-6 w-6 text-violet2"></i></span>
+        <h3 class="mt-6 font-display text-xl font-semibold text-white">Design UX/UI</h3>
+        <p class="mt-3 text-slate-400">Recherche utilisateur, prototypes testés et design systems pour des parcours simples et reconnaissables.</p>
+      </article>
+      <article class="glass rounded-3xl p-8 lg:col-span-2">
+        <span class="grid h-12 w-12 place-items-center rounded-2xl bg-electric/20"><i data-lucide="cloud-cog" class="h-6 w-6 text-electric"></i></span>
+        <h3 class="mt-6 font-display text-xl font-semibold text-white">Sécurité & Cloud</h3>
+        <p class="mt-3 text-slate-400">Authentification SSO, chiffrement, API robustes et infrastructure cloud européenne, supervisée en continu.</p>
+      </article>
+      <article class="glass group relative overflow-hidden rounded-3xl p-8 lg:col-span-4">
+        <div class="glow -bottom-24 -left-10 h-64 w-64 bg-violet2/20"></div>
+        <span class="relative grid h-12 w-12 place-items-center rounded-2xl bg-white/10"><i data-lucide="compass" class="h-6 w-6 text-white"></i></span>
+        <h3 class="relative mt-6 font-display text-2xl font-semibold text-white">Audit & Conseil</h3>
+        <p class="relative mt-3 max-w-lg text-slate-400">Audit d’applications existantes, cadrage fonctionnel et feuille de route technique pour sécuriser votre investissement avant le premier développement.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise" class="relative border-y border-white/10 bg-navy/60 py-24 lg:py-32">
+  <div class="mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-[.8fr_1.2fr] lg:px-8">
+    <div class="lg:sticky lg:top-32 lg:self-start">
+      <h2 class="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">Une méthode éprouvée, un calendrier tenu</h2>
+      <p class="mt-4 text-lg text-slate-400">Des sprints courts, des démonstrations régulières et un interlocuteur unique : vous gardez la main de bout en bout.</p>
+      <a href="#contact" class="mt-8 inline-flex items-center gap-2 font-semibold text-white hover:underline">Parler de votre projet<i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+    </div>
+    <ol class="space-y-5">
+      <li class="glass flex gap-5 rounded-2xl p-6"><span class="font-display text-2xl font-semibold grad-text">01</span><div><h3 class="font-display text-lg font-semibold text-white">Cadrage</h3><p class="mt-1 text-slate-400">Ateliers avec vos équipes, définition des priorités, budget et planning prévisionnels.</p></div></li>
+      <li class="glass flex gap-5 rounded-2xl p-6"><span class="font-display text-2xl font-semibold grad-text">02</span><div><h3 class="font-display text-lg font-semibold text-white">Design</h3><p class="mt-1 text-slate-400">Maquettes interactives testées auprès de vrais utilisateurs avant tout développement.</p></div></li>
+      <li class="glass flex gap-5 rounded-2xl p-6"><span class="font-display text-2xl font-semibold grad-text">03</span><div><h3 class="font-display text-lg font-semibold text-white">Développement</h3><p class="mt-1 text-slate-400">Sprints de deux semaines, tests automatisés et livraison continue sur une version de recette.</p></div></li>
+      <li class="glass flex gap-5 rounded-2xl p-6"><span class="font-display text-2xl font-semibold grad-text">04</span><div><h3 class="font-display text-lg font-semibold text-white">Lancement et évolution</h3><p class="mt-1 text-slate-400">Publication sur les stores, supervision, maintenance et nouvelles fonctionnalités.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES -->
+<section id="temoignages" class="py-24 lg:py-32">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <h2 class="max-w-2xl font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">Ce que disent nos clients</h2>
+    <div class="mt-12 grid gap-5 lg:grid-cols-3">
+      <figure class="glass flex flex-col justify-between rounded-3xl p-8">
+        <blockquote class="text-slate-300">« L’application terrain a réduit de 40 % le temps de saisie de nos techniciens. Xman a compris nos contraintes métier dès le premier atelier. »</blockquote>
+        <figcaption class="mt-8 flex items-center gap-3"><span class="grid h-11 w-11 place-items-center rounded-full btn-grad font-display text-sm font-semibold text-white">SL</span><span class="text-sm"><span class="block font-semibold text-white">Sophie Laurent</span><span class="text-slate-400">DSI, Nexora</span></span></figcaption>
+      </figure>
+      <figure class="glass flex flex-col justify-between rounded-3xl p-8">
+        <blockquote class="text-slate-300">« Un lancement sur iOS et Android dans les délais, avec une sécurité irréprochable. Notre audit interne n’a relevé aucune remarque critique. »</blockquote>
+        <figcaption class="mt-8 flex items-center gap-3"><span class="grid h-11 w-11 place-items-center rounded-full btn-grad font-display text-sm font-semibold text-white">MD</span><span class="text-sm"><span class="block font-semibold text-white">Marc Delmas</span><span class="text-slate-400">Directeur Digital, Altiva</span></span></figcaption>
+      </figure>
+      <figure class="glass flex flex-col justify-between rounded-3xl p-8">
+        <blockquote class="text-slate-300">« Leur design a transformé l’adoption : 85 % de nos collaborateurs utilisent l’application chaque semaine, contre 30 % avec l’ancienne version. »</blockquote>
+        <figcaption class="mt-8 flex items-center gap-3"><span class="grid h-11 w-11 place-items-center rounded-full btn-grad font-display text-sm font-semibold text-white">IB</span><span class="text-sm"><span class="block font-semibold text-white">Inès Bouchard</span><span class="text-slate-400">COO, Orbis</span></span></figcaption>
+      </figure>
+    </div>
+    <p class="mt-6 text-xs text-slate-600">Témoignages et noms d’entreprises fictifs, à titre d’illustration.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="relative overflow-hidden border-t border-white/10 py-24 lg:py-32">
+  <div class="glow left-1/2 top-0 h-80 w-[600px] -translate-x-1/2 bg-electric/20"></div>
+  <div class="relative mx-auto grid max-w-7xl gap-14 px-5 lg:grid-cols-[.9fr_1.1fr] lg:px-8">
+    <div>
+      <h2 class="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">Parlons de votre application</h2>
+      <p class="mt-4 max-w-md text-lg text-slate-400">Décrivez votre besoin en quelques lignes. Un conseiller Xman revient vers vous avec une première estimation.</p>
+      <ul class="mt-10 space-y-5 text-slate-300">
+        <li class="flex items-center gap-4"><span class="grid h-11 w-11 place-items-center rounded-xl glass"><i data-lucide="clock" class="h-5 w-5 text-electric"></i></span>Réponse sous 24 h ouvrées</li>
+        <li class="flex items-center gap-4"><span class="grid h-11 w-11 place-items-center rounded-xl glass"><i data-lucide="file-lock-2" class="h-5 w-5 text-electric"></i></span>Échanges couverts par un accord de confidentialité</li>
+        <li class="flex items-center gap-4"><span class="grid h-11 w-11 place-items-center rounded-xl glass"><i data-lucide="mail" class="h-5 w-5 text-electric"></i></span>contact@xman.example</li>
+      </ul>
+    </div>
+
+    <div class="glass relative min-h-[460px] rounded-3xl p-6 sm:p-9">
+      <form id="contactForm" novalidate class="space-y-5">
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div><label for="nom" class="mb-2 block text-sm font-medium text-slate-300">Nom</label><input id="nom" name="nom" type="text" required autocomplete="name" placeholder="Camille Martin" class="field w-full rounded-xl px-4 py-3 text-white placeholder-slate-600"></div>
+          <div><label for="email" class="mb-2 block text-sm font-medium text-slate-300">Email professionnel</label><input id="email" name="email" type="email" required autocomplete="email" placeholder="camille@entreprise.fr" class="field w-full rounded-xl px-4 py-3 text-white placeholder-slate-600"></div>
+        </div>
+        <div><label for="sujet" class="mb-2 block text-sm font-medium text-slate-300">Sujet / Projet</label>
+          <select id="sujet" name="sujet" required class="field w-full rounded-xl px-4 py-3 text-white">
+            <option value="" class="bg-navy">Choisissez un type de projet</option>
+            <option class="bg-navy">Nouvelle application mobile</option>
+            <option class="bg-navy">Refonte d’une application existante</option>
+            <option class="bg-navy">Audit et conseil</option>
+            <option class="bg-navy">Autre demande</option>
+          </select></div>
+        <div><label for="message" class="mb-2 block text-sm font-medium text-slate-300">Message</label><textarea id="message" name="message" rows="5" required placeholder="Contexte, utilisateurs visés, échéance souhaitée…" class="field w-full resize-none rounded-xl px-4 py-3 text-white placeholder-slate-600"></textarea></div>
+        <p id="formError" class="hidden text-sm text-rose-300" role="alert">Veuillez renseigner tous les champs avec une adresse email valide.</p>
+        <button id="submitBtn" type="submit" class="btn-grad flex w-full items-center justify-center gap-3 rounded-full px-7 py-4 font-semibold text-white disabled:cursor-wait disabled:opacity-90">
+          <span id="btnLabel">Envoyer ma demande</span><span id="btnSpin" class="spinner hidden"></span>
+        </button>
+        <p class="text-center text-xs text-slate-500">Vos données restent confidentielles et ne sont jamais revendues.</p>
+      </form>
+
+      <div id="success" class="absolute inset-0 hidden flex-col items-center justify-center rounded-3xl bg-navy p-8 text-center" role="status" aria-live="polite">
+        <div class="pop grid h-20 w-20 place-items-center rounded-full btn-grad"><svg viewBox="0 0 24 24" class="h-10 w-10" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="draw" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h3 class="mt-7 font-display text-2xl font-semibold text-white">Merci ! Votre demande a bien été envoyée.</h3>
+        <p class="mt-3 max-w-sm text-slate-400">Un conseiller Xman vous recontactera sous 24h.</p>
+        <button id="resetBtn" type="button" class="mt-8 rounded-full glass px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10">Envoyer une autre demande</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-white/10 bg-navy/60 pt-14 pb-8">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
+      <div>
+        <a href="#accueil" class="flex items-center gap-2.5"><span class="grid h-9 w-9 place-items-center rounded-xl btn-grad"><svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></span><span class="font-display text-xl font-semibold text-white">Xman</span></a>
+        <p class="mt-4 max-w-xs text-sm text-slate-400">Applications mobiles sur mesure pour les entreprises exigeantes.</p>
+        <div class="mt-6 flex gap-3">
+          <a href="#" aria-label="LinkedIn" class="grid h-10 w-10 place-items-center rounded-full glass transition hover:bg-white/10"><i data-lucide="linkedin" class="h-4 w-4"></i></a>
+          <a href="#" aria-label="X (Twitter)" class="grid h-10 w-10 place-items-center rounded-full glass transition hover:bg-white/10"><i data-lucide="twitter" class="h-4 w-4"></i></a>
+          <a href="#" aria-label="GitHub" class="grid h-10 w-10 place-items-center rounded-full glass transition hover:bg-white/10"><i data-lucide="github" class="h-4 w-4"></i></a>
+        </div>
+      </div>
+      <nav aria-label="Liens rapides"><p class="font-display text-sm font-semibold text-white">Liens rapides</p>
+        <ul class="mt-4 space-y-3 text-sm text-slate-400"><li><a class="hover:text-white" href="#services">Services</a></li><li><a class="hover:text-white" href="#expertise">Notre Expertise</a></li><li><a class="hover:text-white" href="#temoignages">Témoignages</a></li><li><a class="hover:text-white" href="#contact">Contact</a></li></ul></nav>
+      <nav aria-label="Informations légales"><p class="font-display text-sm font-semibold text-white">Légal</p>
+        <ul class="mt-4 space-y-3 text-sm text-slate-400"><li><a class="hover:text-white" href="#">Mentions légales</a></li><li><a class="hover:text-white" href="#">Politique de confidentialité</a></li><li><a class="hover:text-white" href="#">Conditions générales</a></li></ul></nav>
+    </div>
+    <p class="mt-12 border-t border-white/10 pt-6 text-center text-sm text-slate-500">© <span id="year">2026</span> Xman. Tous droits réservés.</p>
+  </div>
+</footer>
 
 <script>
-const KIRUA="https://iili.io/naT8jou.jpg";
-function fb(i){if(!i.dataset.f){i.dataset.f=1;i.src=KIRUA}}
-const si=n=>`<img src="https://cdn.simpleicons.org/${n}/ffffff" alt="">`;
-const D=[
-{n:"Discord",t:"Contact direct",u:"https://discord.com/users/870788515267502101",c:"#5865F2",i:`<img src="https://cdn.simpleicons.org/discord/5865F2" alt="">`,d:"Le moyen le plus rapide de me joindre : messages, questions et collaborations.",p:["Réponse rapide","Collaborations","Discussion directe"]},
-{n:"TikTok",t:"Vidéos & contenus",u:"https://www.tiktok.com/@x.man2.0",c:"#25f4ee",i:si("tiktok"),d:"Mon compte @x.man2.0 : retrouve mes vidéos et mes derniers contenus.",p:["Contenus récents","Compte @xman","Abonne-toi"]},
-{n:"Roblox",t:"Profil de jeu",u:"https://www.roblox.com/users/1678382639/profile",c:"#ef4444",i:si("roblox"),d:"Mon profil Roblox : mes jeux, mes amis et mon activité.",p:["Profil officiel","Jeux & amis","Ajoute-moi"]},
-{n:"Drive",t:"Stockage de données",u:"https://xman-drive.onrender.com/",c:"#38bdf8",i:`<svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4 4 0 0 1-.6-7.95A6 6 0 0 1 18 9.5a4.2 4.2 0 0 1-.5 8.5z"/></svg>`,d:"Xman Drive, mon espace personnel pour stocker et retrouver mes données.",p:["Stockage de fichiers","Accès simple","Toujours à portée"]},
-{n:"GitHub",t:"Code & projets",u:"https://github.com/Fortx46",c:"#a78bfa",i:si("github"),d:"Mon profil GitHub : le code de mes projets et mes dépôts.",p:["Projets open source","Code source","Suis mon travail"]},
-{n:"Security Server",t:"Site Security Server",u:"https://xman-security.onrender.com/",c:"#f472b6",i:`<svg viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>`,d:"Xman Security, mon site dédié à la Security Server.",p:["Protection","Outils Security Server","Site dédié"]}];
-const $=s=>document.querySelector(s);
-// rendu
-$("#mq").innerHTML=[...D,...D].map(x=>`<span>${x.i}${x.n}</span>`).join("");
-$("#track").innerHTML=D.map(x=>`<a class="card gb" href="${x.u}" target="_blank" rel="noopener" style="--c:${x.c}"><div class="ic">${x.i}</div><h3>${x.n}</h3><div class="t">${x.t}</div><p>${x.d}</p><span class="go">Visiter <b>→</b></span></a>`).join("");
-$("#dots").innerHTML=D.map(()=>"<i></i>").join("");
-$("#rows").innerHTML=D.map(x=>`<div class="row" style="--c:${x.c}"><div class="vis gb rv"><div class="o1"></div><div class="big">${x.i}</div></div><div class="rv" style="--d:.15s"><span class="sub">${x.t}</span><h3 class="g">${x.n}</h3><p class="d">${x.d}</p><ul>${x.p.map(p=>`<li>${p}</li>`).join("")}</ul><a class="btn mag" href="${x.u}" target="_blank" rel="noopener">Ouvrir ${x.n}</a></div></div>`).join("");
-$("#fl").innerHTML=D.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${x.n}</a>`).join("");
-// mots qui changent
-let k=0;setInterval(()=>{const w=$("#w");k=(k+1)%D.length;w.textContent=D[k].n;w.style.animation="none";w.offsetWidth;w.style.animation=""},2000);
-// apparition au scroll
-const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}}),{threshold:.15});
-document.querySelectorAll(".rv").forEach(e=>io.observe(e));
-// carrousel : glisser à la souris, flèches, points
-const tr=$("#track"),dots=[...document.querySelectorAll("#dots i")];let down=0,sx=0,sl=0,mv=0;
-tr.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;down=1;mv=0;sx=e.clientX;sl=tr.scrollLeft;tr.classList.add("drag");document.getElementById("ring").classList.add("d")});
-addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-sx;mv=Math.max(mv,Math.abs(dx));tr.scrollLeft=sl-dx});
-addEventListener("pointerup",()=>{if(!down)return;down=0;tr.classList.remove("drag");$("#ring").classList.remove("d")});
-tr.addEventListener("click",e=>{if(mv>6)e.preventDefault()},true);
-tr.addEventListener("dragstart",e=>e.preventDefault());
-const step=()=>tr.children[0].offsetWidth+22;
-$("#pv").onclick=()=>tr.scrollBy({left:-step(),behavior:"smooth"});
-$("#nx").onclick=()=>tr.scrollBy({left:step(),behavior:"smooth"});
-const upd=()=>{const i=Math.round(tr.scrollLeft/step());dots.forEach((d,j)=>d.classList.toggle("on",j===Math.min(i,D.length-1)))};
-tr.addEventListener("scroll",upd);upd();
-// effet 3D + lumière sur les cartes
-document.querySelectorAll(".card").forEach(c=>{c.addEventListener("pointermove",e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.setProperty("--mx",x*100+"%");c.style.setProperty("--my",y*100+"%");if(e.pointerType==="mouse"&&!down)c.style.transform=`perspective(800px) rotateY(${(x-.5)*10}deg) rotateX(${(.5-y)*10}deg)`});c.addEventListener("pointerleave",()=>c.style.transform="")});
-// boutons magnétiques
-document.querySelectorAll(".mag").forEach(b=>{b.addEventListener("pointermove",e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.2}px,${(e.clientY-r.top-r.height/2)*.3}px)`});b.addEventListener("pointerleave",()=>b.style.transform="")});
-// curseur rond
-const dot=$("#dot"),ring=$("#ring");let mx=-100,my=-100,rx=-100,ry=-100;
-addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;dot.style.opacity=ring.style.opacity=1;dot.style.transform=`translate(${mx}px,${my}px)`});
-document.addEventListener("pointerleave",()=>dot.style.opacity=ring.style.opacity=0);
-document.addEventListener("pointerover",e=>ring.classList.toggle("h",!!e.target.closest("a,button")));
-(function f(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(f)})();
-// particules
-const c=$("#c"),x=c.getContext("2d");let W,H,P=[];
-function sz(){W=c.width=innerWidth;H=c.height=innerHeight;P=Array.from({length:Math.min(70,W/18|0)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+.5,v:Math.random()*.3+.05,c:["#8b5cf6","#38bdf8","#f472b6"][Math.random()*3|0]}))}
-sz();addEventListener("resize",sz);
-(function l(){x.clearRect(0,0,W,H);for(const p of P){p.y-=p.v;if(p.y<-4){p.y=H+4;p.x=Math.random()*W}x.globalAlpha=.55;x.fillStyle=p.c;x.fillRect(p.x|0,p.y|0,p.r*2,p.r*2)}requestAnimationFrame(l)})();
+  lucide.createIcons();
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Header : fond au scroll
+  const header = document.querySelector('[data-header]');
+  const onScroll = () => header.classList.toggle('bg-night/80', window.scrollY > 20) || header.classList.toggle('backdrop-blur-xl', window.scrollY > 20);
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // Menu mobile
+  const menuBtn = document.getElementById('menuBtn'), mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('hidden') === false;
+    menuBtn.setAttribute('aria-expanded', open);
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { mobileMenu.classList.add('hidden'); menuBtn.setAttribute('aria-expanded', 'false'); }));
+
+  // Compteurs
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target, target = +el.dataset.count;
+      if (reduce) { el.textContent = target; io.unobserve(el); return; }
+      const start = performance.now(), dur = 1400;
+      const tick = (t) => {
+        const p = Math.min((t - start) / dur, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick); io.unobserve(el);
+    });
+  }, { threshold: .6 });
+  document.querySelectorAll('[data-count]').forEach(el => io.observe(el));
+
+  // Formulaire (simulation)
+  const form = document.getElementById('contactForm'), btn = document.getElementById('submitBtn'),
+        label = document.getElementById('btnLabel'), spin = document.getElementById('btnSpin'),
+        err = document.getElementById('formError'), success = document.getElementById('success');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((d.get('email') || '').trim());
+    const filled = ['nom', 'sujet', 'message'].every(k => (d.get(k) || '').trim());
+    if (!emailOk || !filled) { err.classList.remove('hidden'); return; }
+    err.classList.add('hidden');
+    btn.disabled = true; spin.classList.remove('hidden'); label.textContent = 'Envoi en cours…';
+    setTimeout(() => {
+      success.classList.remove('hidden'); success.classList.add('flex');
+      btn.disabled = false; spin.classList.add('hidden'); label.textContent = 'Envoyer ma demande';
+      form.reset();
+    }, 1800);
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    success.classList.add('hidden'); success.classList.remove('flex');
+    document.getElementById('nom').focus();
+  });
 </script>
 </body>
 </html>
